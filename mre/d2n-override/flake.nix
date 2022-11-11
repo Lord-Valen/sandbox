@@ -4,8 +4,8 @@
   };
 
   outputs = {
+    self,
     dream2nix,
-    ...
   }: let
     nixpkgs = dream2nix.inputs.nixpkgs;
     l = nixpkgs.lib // builtins;
@@ -26,7 +26,7 @@
     dream2nix.lib.dlib.mergeFlakes [
       d2n-flake
       {
-        devShells = forAllSystems (system: pkgs: {
+        devShells = forAllSystems (system: pkgs: (l.optionalAttrs (d2n-flake ? devShells) {
           default = d2n-flake.devShells.${system}.default.overrideAttrs (old: {
             buildInputs =
               old.buildInputs
@@ -34,7 +34,7 @@
                 pkgs.hello
               ];
           });
-        });
+        }));
       }
     ];
 }
