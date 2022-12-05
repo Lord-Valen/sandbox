@@ -31,11 +31,11 @@
       d2n-flake
       {
         devShells = forAllSystems (system: pkgs: {
-          default = d2n-flake.devShells.${system}.default.overrideAttrs (old: {
-            buildInputs = old.buildInputs ++ [
+          default = d2n-flake.devShells.${system}.default.addConfig {
+            packages = [
               pkgs.hello
             ];
-          });
+          };
         });
       }
     ];
